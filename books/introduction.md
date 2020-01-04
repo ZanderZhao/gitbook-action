@@ -44,11 +44,6 @@ You can add my, create it by your own.
 # You can visit https://zlogs.net/gitbook-action/ for more information.
 
 name: 'Gitbook Action'
-description: 'Github Action For Gitbook'
-author: 'ZanderZhao'
-branding:
-  icon: 'book'
-  color: 'gray-dark'
 
 on:
   push:
