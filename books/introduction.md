@@ -12,7 +12,7 @@ You can visit <https://zlogs.net/gitbook-action/> for more information.
 
 ### 1.add the following in `repo->Setting->Secrets->Add a new secret`
 
-| Name             | Value                                            | 说明                                                         |
+| Name             | Value                                            | Tip                                                        |
 | ---------------- | ------------------------------------------------ | ------------------------------------------------------------ |
 | GIT_NAME         | your git name                                    | like zanderzhao                                              |
 | GIT_EMAIL        | your git email                                   | like example@exp.com                                         |
