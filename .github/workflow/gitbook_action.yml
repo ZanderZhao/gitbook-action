@@ -1,0 +1,11 @@
+name: Gitbook Action
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: ZanderZhao/gitbook-action@v1.02
