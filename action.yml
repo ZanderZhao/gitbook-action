@@ -1,56 +1,319 @@
-# You must put this in your repo master branch  as repo/.github/workflow/gitbook_action.yml
-# You must add the following secrets in your Secrets(repo->Setting->Secrets->Add a new secret)  
-# Name:   GIT_NAME              Value:  your git name like ZanderZhao
-# Name:   GIT_EMAIL             Value:  your git email like example@exp.com
-# Name:   THE_GITHUB_TOKEN      Value:  you can git it from Settings->Developer settings->Personal access tokens->Generate new token
-# Name:   THE_GITHUB_REF        Value:  github.com/your_name/your_repo_name.git
-# Name:   RES_FOR_PAGES         Value:  put the branch name here like gh-pages,where the build book you want put for
-# Pay attention，THE_GITHUB_REF can't add https:// before, 
-# And RES_FOR_PAGES must be create and be set as pages before.
-# When you make THE_GITHUB_TOKEN ,the push permission is must have，the others, you can add.
-# You can visit https://zlogs.net/gitnook-action/ for more information.
-
 name: 'Gitbook Action'
 description: 'Github Action For Gitbook'
 author: 'ZanderZhao'
 branding:
   icon: 'book'
   color: 'gray-dark'
-
-on:
-  push:
-    branches:    
-      - master
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [8]
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: install_gitbook_plugins
-      run: |
-        npm install gitbook-cli  -g
-        gitbook -v
-        gitbook install
-    - name: build_gitbook
-      run: |
-        gitbook build
-    - name: push_to_pages
-      run: |
-        cd ./_book
-        git init
-        git config --local user.name "${{ secrets.GIT_NAME }}"
-        git config --local user.email "${{ secrets.GIT_EMAIL }}"
-        git add *
-        git commit -m "update"
-        git push --force  "https://${{ secrets.THE_GITHUB_TOKEN }}@${{ secrets.THE_GITHUB_REF }}" master:${{ secrets.RES_FOR_PAGES }}
-      env:
-        CI: true
+inputs:
+  token:
+    description: 'Can be Token or Password for source_repo(clone token) and publish_repo(clone push token)'
+    required: true
+  git_name:
+    description: 'Default GITHUB_ACTOR, If git name is different with github, please add'
+    required: false
+  git_email:
+    description: 'Default **@users.noreply.github.com If git name is different with github, please add'
+    required: false
+  time_zone:
+    description: 'System Default, if set, like Asia/Shanghai'
+    required: false
+  source_token:
+    description: 'Default token, if not, please add (clone)'
+    required: false
+  source_git_name:
+    description: 'Default git_name, if not, please add'
+    required: false
+  source_repo:
+    description: 'Default this GITHUB_REPOSITORY, if not please add like username/reponame '
+    required: false
+  source_hub:
+    description: 'default is github.com,can be gitlib.com  gitee.com ...'
+    required: false
+    default: 'github.com'
+  source_branch:
+    description: 'Default master'
+    required: false
+    default: 'master'
+  source_dir:
+    description: 'Where gitbook source. Default is root'
+    required: false
+    default:  '/'
+  source_edit_time:
+    description: 'Default false, if plugins need last edit time, set true'
+    required: false
+    default: false
+  publish_token:
+    description: 'Default token, if not please add (clone push)'
+    required: false
+  publish_git_name:
+    description: 'Default git_name, if not please add'
+    required: false
+  publish_git_email:
+    description: 'Default git_email, if not please add'
+    required: false
+  publish_repo:
+    description: 'Default this GITHUB_REPOSITORY, if not please add like username/reponame'
+    required: false
+  publish_commit_message:
+    description: 'Default Updated by gitbook-action and time, can use last commit message'
+    required: false
+  publish_hub:
+    description: 'Default is github.com,can be gitlib.com gitee.com ...'
+    required: false
+    default: 'github.com'
+  publish_branch:
+    description: 'Defaule is gh-pages, auto create'
+    required: false
+    default: 'gh-pages'
+  publish_dir:
+    description: 'Default is root, if not add like docs or docs/gitbook ...'
+    required: false
+    default:  '/'
+  publish_commit_history:
+    description: 'set false will only one commit at publish_repo'
+    required: false
+    default:  true
+  publish_cname:
+    description: 'Default null, can set www.example.com example.com ...'
+    required: false
+    default:  'null'
+  publish_push_force:
+    description: 'Default false. Set true will enable git push force'
+    required: false
+    default: false
+  publish_remove_last_build:
+    description: 'Default true. Set false not remove last build but rewrite same file'
+    required: false
+    default: true
+  gitbook_cli_version:
+    description: 'Default is 2.3.2, can choose from https://www.npmjs.com/package/gitbook-cli?activeTab=versions'
+    required: false
+    default: '2.3.2'
+  gitbook_version:
+    description: 'Default is 3.2.3, can choose from https://www.npmjs.com/package/gitbook?activeTab=versions'
+    required: false
+    default: '3.2.3'
+  gitbook_pdf:
+    description: 'Set true will generate pdf file'
+    required: false
+    default: false
+  gitbook_pdf_dir:
+    description: 'Where the pdf to put. Default mybook, can change / for root, or myebook'
+    required: false
+    default: 'mybook'
+  gitbook_pdf_name:
+    description: 'The name of your pdf. Default ebook'
+    required: false
+    default: 'ebook'
+  gitbook_epub:
+    description: 'Set true will generate epub file'
+    required: false
+    default: false
+  gitbook_epub_dir:
+    description: ''
+    required: false
+    default: 'mybook'
+  gitbook_epub_name:
+    description: ''
+    required: false
+    default: 'ebook'
+  gitbook_mobi:
+    description: 'Set true will generate mobi file'
+    required: false
+    default: false
+  gitbook_mobi_dir:
+    description: ''
+    required: false
+    default: 'mybook'
+  gitbook_mobi_name:
+    description: ''
+    required: false
+    default: 'ebook'
+  source2_git_name:
+    description: 'Default git_name, if not please add'
+    required: false
+  source2_token:
+    description: 'Default token, if not please add (clone)'
+    required: 'false'
+  source2_hub:
+    description: ''
+    required: false
+    default: 'github.com'
+  source2_repo:
+    description: 'Default null, if use please add like username/reponame, (same with source will replace, different will mix)'
+    required: false
+    default: 'null'
+  source2_branch:
+    description: ''
+    required: false
+    default: 'master'
+  source2_dir:
+    description: ''
+    required: false
+    default:  '/'
+  source2_edit_time:
+    description: 'Default false if plugins need last edit time, set true'
+    required: false
+    default: false
+  publish2_git_name:
+    description: 'Default git_name, if not please add'
+    required: false
+  publish2_token:
+    description: 'Default token, if not please add (clone push)'
+    required: 'false'
+  publish2_git_email:
+    description: 'Default git_email, if not please add'
+    required: false
+  publish2_commit_message:
+    description: 'Default Updated by gitbook-action and time'
+    required: false
+  publish2_hub:
+    description: ''
+    required: false
+    default: 'github.com'
+  publish2_repo:
+    description: 'Default null, if use please add like username/reponame'
+    required: false
+    default: 'null'
+  publish2_branch:
+    description: 'Default gh-pages'
+    required: false
+    default: 'gh-pages'
+  publish2_dir:
+    description: ''
+    required: false
+    default:  '/'
+  publish2_cname:
+    description: 'Default null'
+    required: false
+    default:  'null'
+  publish2_push_force:
+    description: 'Default false. Set true will enable git push force'
+    required: false
+    default: false
+  publish2_commit_history:
+    description: 'set false will only one commit at publish2_repo'
+    required: false
+    default:  true
+  publish2_remove_last_build:
+    description: 'Default true. Set false not remove last build but rewrite same file'
+    required: false
+    default: true
+  publish3_git_name:
+    description: 'Default git_name, if not please add'
+    required: false
+  publish3_token:
+    description: 'Default token, if not please add (clone push)'
+    required: 'false'
+  publish3_git_email:
+    description: 'Default git_email, if not please add'
+    required: false
+  publish3_commit_message:
+    description: 'Default Updated by gitbook-action and time'
+    required: false
+  publish3_hub:
+    description: ''
+    required: false
+    default: 'github.com'
+  publish3_repo:
+    description: 'Default null, if use please add like username/reponame'
+    required: false
+    default: 'null'
+  publish3_branch:
+    description: 'Default gh-pages'
+    required: false
+    default: 'gh-pages'
+  publish3_dir:
+    description: 'Default root'
+    required: false
+    default:  '/'
+  publish3_cname:
+    description: 'Default null'
+    required: false
+    default:  'null'
+  publish3_push_force:
+    description: 'Default false. Set true will enable git push force'
+    required: false
+    default: false
+  publish3_commit_history:
+    description: 'set false will only one commit at publish3_repo'
+    required: false
+    default:  true
+  publish3_remove_last_build:
+    description: 'Default true. Set false not remove last build but rewrite same file'
+    required: false
+    default: true
+  not_clean:
+    description: 'Default false. Set true not remove working file'
+    required: false
+    default: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.token }}
+    - ${{ inputs.time_zone }}
+    - ${{ inputs.git_name }}
+    - ${{ inputs.git_email }}
+    - ${{ inputs.source_token }}
+    - ${{ inputs.source_git_name }}
+    - ${{ inputs.source_repo }}
+    - ${{ inputs.source_hub }}
+    - ${{ inputs.source_branch }}
+    - ${{ inputs.source_dir }}
+    - ${{ inputs.source_edit_time }}
+    - ${{ inputs.publish_token }}
+    - ${{ inputs.publish_git_name }}
+    - ${{ inputs.publish_git_email }}
+    - ${{ inputs.publish_repo }}
+    - ${{ inputs.publish_commit_message }}
+    - ${{ inputs.publish_hub }}
+    - ${{ inputs.publish_branch }}
+    - ${{ inputs.publish_dir }}
+    - ${{ inputs.publish_commit_history }}
+    - ${{ inputs.publish_cname }}
+    - ${{ inputs.publish_push_force }}
+    - ${{ inputs.publish_remove_last_build }}
+    - ${{ inputs.gitbook_cli_version }}
+    - ${{ inputs.gitbook_version }}
+    - ${{ inputs.gitbook_pdf }}
+    - ${{ inputs.gitbook_pdf_dir }}
+    - ${{ inputs.gitbook_pdf_name }}
+    - ${{ inputs.gitbook_epub }}
+    - ${{ inputs.gitbook_epub_dir }}
+    - ${{ inputs.gitbook_epub_name }}
+    - ${{ inputs.gitbook_mobi }}
+    - ${{ inputs.gitbook_mobi_dir }}
+    - ${{ inputs.gitbook_mobi_name }}
+    - ${{ inputs.source2_git_name }}
+    - ${{ inputs.source2_token }}
+    - ${{ inputs.source2_hub }}
+    - ${{ inputs.source2_repo }}
+    - ${{ inputs.source2_branch }}
+    - ${{ inputs.source2_dir }}
+    - ${{ inputs.source2_edit_time }}
+    - ${{ inputs.publish2_git_name }}
+    - ${{ inputs.publish2_token }}
+    - ${{ inputs.publish2_git_email }}
+    - ${{ inputs.publish2_commit_message }}
+    - ${{ inputs.publish2_hub }}
+    - ${{ inputs.publish2_repo }}
+    - ${{ inputs.publish2_branch }}
+    - ${{ inputs.publish2_commit_history }}
+    - ${{ inputs.publish2_dir }}
+    - ${{ inputs.publish2_cname }}
+    - ${{ inputs.publish2_push_force }}
+    - ${{ inputs.publish2_remove_last_build }}
+    - ${{ inputs.publish3_git_name }}
+    - ${{ inputs.publish3_token }}
+    - ${{ inputs.publish3_git_email }}
+    - ${{ inputs.publish3_commit_message }}
+    - ${{ inputs.publish3_hub }}
+    - ${{ inputs.publish3_repo }}
+    - ${{ inputs.publish3_branch }}
+    - ${{ inputs.publish3_commit_history }}
+    - ${{ inputs.publish3_dir }}
+    - ${{ inputs.publish3_cname }}
+    - ${{ inputs.publish3_push_force }}
+    - ${{ inputs.publish3_remove_last_build }}
+    - ${{ inputs.not_clean }}
