@@ -14,7 +14,7 @@ jobs:
 
     # example1
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2
+      uses: zanderzhao/gitbook-action@master #v1.2.2
       with:
         token: ${{ secrets.PERSONAL_TOKEN }}
         time_zone: Asia/Shanghai
@@ -24,7 +24,7 @@ jobs:
 
     # example2
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2
+      uses: zanderzhao/gitbook-action@master #v1.2.2
       with:
         token: ${{ secrets.PERSONAL_TOKEN }}
         time_zone: Asia/Shanghai

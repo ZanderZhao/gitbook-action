@@ -21,7 +21,7 @@ jobs:
     - name: Checkout action
       uses: actions/checkout@v2
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v2
+      uses: zanderzhao/gitbook-action@v1.2.2
       with:
         token: ${{ secrets.PERSONAL_TOKEN }}
 ```
@@ -184,66 +184,60 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
   + description: 'Default is [2.3.2]( https://www.npmjs.com/package/gitbook-cli?activeTab=versions)'
 
   + default: '2.3.2'
-
 + **gitbook_version**:
 
   + description: 'Default is [3.2.3](https://www.npmjs.com/package/gitbook?activeTab=versions)'
 
   + default: '3.2.3'
-
 + **gitbook_pdf**:
 
   + description: 'Set true will generate pdf file'
 
   + default: false
-
 + **gitbook_pdf_dir**:
 
   + description: 'Where the pdf to put. Default mybook, can change / for root, or myebook'
 
   + default: 'mybook'
-
 + **gitbook_pdf_name**:
 
   + description: 'The name of your pdf. Default ebook'
 
   + default: 'ebook'
-
 + **gitbook_epub**:
 
   + description: 'Set true will generate epub file'
 
   + default: false
-
 + **gitbook_epub_dir**:
 
   + description: ''
 
   + default: 'mybook'
-
 + **gitbook_epub_name**:
 
   + description: ''
 
   + default: 'ebook'
-
 + **gitbook_mobi**:
 
   + description: 'Set true will generate mobi file'
 
   + default: false
-
 + **gitbook_mobi_dir**:
 
   + description: ''
 
   + default: 'mybook'
-
 + **gitbook_mobi_name**:
 
   + description: ''
-
   + default: 'ebook'
++ **font_install**
+  + description: ''Install font for pdf, Not install any font, maybe affect the pdf/mobi/epub, can add font_install at book.json"
+  + example: `sudo apt-get install fonts-noto-cjk`or`sudo apt-get install ttf-mscorefonts-installer`,use sudo install for global.
++ **not_clean**
+  + description: 'Default false. Set true  will not remove working file when the workflow finish, if you set cache'
 
 ### For other repo   {#otherrepo}
 

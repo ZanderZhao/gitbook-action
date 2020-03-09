@@ -1,8 +1,6 @@
-# Container image that runs your code
-FROM node:10
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
+FROM zanderzhao/gitbook-action
+
 COPY entrypoint.sh /entrypoint.sh
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
 ENTRYPOINT ["/entrypoint.sh"]

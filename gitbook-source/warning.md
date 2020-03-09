@@ -66,7 +66,11 @@
 
 
 
+3308
 
++ Not install any font, maybe affect the pdf/mobi/epub, can add font_install at book.json
+  + If you use pdf/epub/mobi without installing any font may create fail.
+  + You can use like `font_install: sudo apt-get install fonts-noto-cjk `to install the font you need in pdf. Not limited to this, remember install for global.
 
 
 

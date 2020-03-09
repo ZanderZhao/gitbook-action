@@ -21,7 +21,7 @@ jobs:
     - name: Checkout action
       uses: actions/checkout@v2
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v2
+      uses: zanderzhao/gitbook-action@v1.2.2
       with:
         token: ${{ secrets.PERSONAL_TOKEN }}
 ```
@@ -140,6 +140,8 @@ publish3_dir
 publish3_cname
 publish3_push_force
 publish3_remove_last_build
+font_install
+not_clean
 ```
 
 

@@ -88,11 +88,9 @@ inputs:
   gitbook_cli_version:
     description: 'Default is 2.3.2, can choose from https://www.npmjs.com/package/gitbook-cli?activeTab=versions'
     required: false
-    default: '2.3.2'
   gitbook_version:
     description: 'Default is 3.2.3, can choose from https://www.npmjs.com/package/gitbook?activeTab=versions'
     required: false
-    default: '3.2.3'
   gitbook_pdf:
     description: 'Set true will generate pdf file'
     required: false
@@ -244,9 +242,12 @@ inputs:
     required: false
     default: true
   not_clean:
-    description: 'Default false. Set true not remove working file'
+    description: 'Default false. Set true  will not remove working file'
     required: false
     default: false
+  font_install:
+    description: 'Install font for pdf'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -317,3 +318,4 @@ runs:
     - ${{ inputs.publish3_push_force }}
     - ${{ inputs.publish3_remove_last_build }}
     - ${{ inputs.not_clean }}
+    - ${{ inputs.font_install }}

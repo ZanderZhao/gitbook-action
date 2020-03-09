@@ -56,7 +56,11 @@
 
 
 
+3108 3108-2 3108-3
 
++ You set publish_commit_history:false , must set publish_push_force:true at same time
+  + clean commit need push force
+  + set publish_commit_history:false , must set publish_push_force:true at same time
 
 
 

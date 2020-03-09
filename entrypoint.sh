@@ -1,12 +1,12 @@
 #!/bin/sh -l
 
 
-
 #  print missage style
-
 # error 31XX
 print_error(){
-  echo  "\033[31m ERROR $@  \033[0m \a \n Find Detail From: https://ZanderZhao.github.io/gitbook-action/error" > /dev/stderr
+  echo  "\033[31m ERROR $@  \033[0m \a \n " > /dev/stderr
+  echo  "\033[32m Find Detail From: https://ZanderZhao.github.io/gitbook-action/error \033[0m"
+  exit  1
 }
 # info
 print_info(){
@@ -14,10 +14,9 @@ print_info(){
 }
 # warning 33XX
 print_warning(){
-  echo  "\033[33m WARNING $@  \033[0m \n Find Detail From: https://ZanderZhao.github.io/gitbook-action/warning" > /dev/stderr
+  echo  "\033[33m WARNING $@  \033[0m \n " > /dev/stderr
+  echo  "\033[32m Find Detail From: https://ZanderZhao.github.io/gitbook-action/warning \033[0m"
 }
-
-
 
 # prepare var and env
 echo "--------------------------------------------"
@@ -34,7 +33,7 @@ if [ -n "${INPUT_TOKEN}" ]; then
   TOKEN=${INPUT_TOKEN}
 else
   print_error "3101 need token please"
-  exit 1
+  
 fi
 
 # Set time for some plugins
@@ -65,8 +64,6 @@ else
   echo "GIT_EMAIL default GITHUB_ACTOR@users.noreply.github.com"
   GIT_EMAIL="${GITHUB_ACTOR}@users.noreply.github.com"
 fi
-
-
 
 echo "--------------------"
 echo "FOR source"
@@ -99,7 +96,6 @@ else
   SOURCE_REPO=${GITHUB_REPOSITORY}
 fi
 
-
 if [ "${INPUT_SOURCE_HUB}" !=  "github.com" ]; then 
   print_info "SOURCE_HUB provided"
 else
@@ -123,7 +119,6 @@ if [ "${INPUT_SOURCE_EDIT_TIME}" != "false" ]; then
 else
   echo "SOURCE_EDIT_TIME default false"
 fi
-
 
 echo "--------------------"
 echo "FOR publish"
@@ -204,7 +199,7 @@ else
   echo "PUBLISH_CNAME default null"
 fi
 
-if [ "${INPUT_PUBLISH_PUSH_FORCE}" != false ]; then 
+if [ "${INPUT_PUBLISH_PUSH_FORCE}" != "false" ]; then 
   print_info "PUBLISH_PUSH_FORCE provided"
 else
   echo "PUBLISH_PUSH_FORCE default false"
@@ -216,6 +211,10 @@ else
   echo "PUBLISH_REMOVE_LAST_BUILD default true"
 fi
 
+if [[ "${INPUT_PUBLISH_COMMIT_HISTORY}" = "false" && "${INPUT_PUBLISH_PUSH_FORCE}" = "false" ]]; then 
+  print_error "3108:You set publish_commit_history:false , must set publish_push_force:true at same time"
+  
+fi
 
 
 
@@ -223,18 +222,19 @@ echo "--------------------"
 echo "FOR Gitbook"
 echo "----------"
 
-if [ "${INPUT_GITBOOK_CLI_VERSION}" != "2.3.2" ]; then 
+if [ -n "${INPUT_GITBOOK_CLI_VERSION}" ]; then 
   print_info "GITBOOK_CLI_VERSION provided"
 else
   echo "GITBOOK_CLI_VERSION default 2.3.2"
 fi
 
-if [ "${INPUT_GITBOOK_VERSION}" != "3.2.3" ]; then 
-  print_info "GITBOOK_VERSION provided"
+GITBOOK_BUILD_VERSION=""
+if [ -n "${INPUT_GITBOOK_VERSION}" ]; then
+  echo "GITBOOK_VERSION provided, it will replace the version in book.json(if you set)"
+  GITBOOK_BUILD_VERSION=${INPUT_GITBOOK_VERSION}
 else
-  echo "GITBOOK_VERSION default 3.2.3"
+  echo "If you not set GITBOOK VERSION in book.json, it will DEFAULT 3.2.3"
 fi
-
 
 if [ "${INPUT_GITBOOK_PDF}" != "false" ]; then 
   print_info "GITBOOK_PDF provided"
@@ -252,8 +252,6 @@ else
   echo "GITBOOK_PDF default false"
 fi
 
-
-
 if [ "${INPUT_GITBOOK_EPUB}" != "false" ]; then 
   print_info "GITBOOK_EPUB provided"
   if [ "${INPUT_GITBOOK_EPUB_DIR}" != "mybook" ]; then 
@@ -270,8 +268,6 @@ else
   echo "GITBOOK_EPUB default false"
 fi
 
-
-
 if [ "${INPUT_GITBOOK_MOBI}" != "false" ]; then 
   print_info "GITBOOK_MOBI provided"
   if [ "${INPUT_GITBOOK_MOBI_DIR}" != "mybook" ]; then 
@@ -287,9 +283,6 @@ if [ "${INPUT_GITBOOK_MOBI}" != "false" ]; then
 else
   echo "GITBOOK_MOBI default false"
 fi
-
-
-
 
 
 # if need two source repo
@@ -315,37 +308,29 @@ if [ ${INPUT_SOURCE2_REPO} != "null" ]; then
     echo "SOURCE2_GIT_NAME default GIT_NAME"
     SOURCE2_GIT_NAME=${GIT_NAME}
   fi
-  
   if [ "${INPUT_SOURCE2_HUB}" != "github.com"  ]; then 
     print_info "SOURCE2_HUB provided"
   else
     echo "SOURCE2_HUB default github.com"
   fi
-  
   if [ "${INPUT_SOURCE2_BRANCH}" != "master"  ]; then 
     print_info "SOURCE2_BRANCH provided"
   else
     echo "SOURCE2_BRANCH default master"
   fi
-
   if [ "${INPUT_SOURCE2_DIR}" != "/"  ]; then 
     print_info "SOURCE2_DIR provided"
   else
     echo "SOURCE2_DIR default /"
   fi
-
   if [ "${INPUT_SOURCE2_EDIT_TIME}" != "false"  ]; then 
     print_info "SOURCE2_EDIT_TIME provided"
   else
     echo "SOURCE2_EDIT_TIME default false"
   fi
-
 else
   echo "SOURCE2 default false, if need you can use two source repo to build together"
 fi
-
-
-
 
 
 if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
@@ -384,57 +369,47 @@ if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
     echo "PUBLISH3_COMMIT_MESSAGE default Updated by gitbook-action and time"
     PUBLISH2_COMMIT_MESSAGE="Updated by gitbook-action `date '+%Y-%m-%d %H:%M:%S'`"
   fi
-
-
   if [ "${INPUT_PUBLISH2_HUB}" != "github.com"  ]; then 
     print_info "PUBLISH2_HUB provided"
   else
     echo "PUBLISH2_HUB default github.com"
   fi
-
   if [ "${INPUT_PUBLISH2_BRANCH}" != "gh-pages"  ]; then 
     print_info "PUBLISH2_BRANCH provided"
   else
     echo "PUBLISH2_BRANCH default gh-pages"
   fi
-
   if [ "${INPUT_PUBLISH2_DIR}" != "/"  ]; then 
     print_info "PUBLISH2_DIR provided"
   else
     echo "PUBLISH2_DIR default /"
   fi
-
   if [ "${INPUT_PUBLISH2_COMMIT_HISTORY}" != "true"  ]; then 
     print_info "PUBLISH2_COMMIT_HISTORY provided"
   else
     echo "PUBLISH2_COMMIT_HISTORY default true"
   fi
-
   if [ "${INPUT_PUBLISH2_CNAME}" != "null"  ]; then 
     print_info "PUBLISH2_CNAME provided"
   else
     echo "PUBLISH2_CNAME default null"
   fi
-
   if [ "${INPUT_PUBLISH2_PUSH_FORCE}" != "false"  ]; then 
     print_info "PUBLISH2_PUSH_FORCE provided"
   else
     echo "PUBLISH2_PUSH_FORCE default false"
   fi
-
   if [ "${INPUT_PUBLISH2_REMOVE_LAST_BUILD}" != "true"  ]; then 
     print_info "PUBLISH2_REMOVE_LAST_BUILD provided"
   else
     echo "PUBLISH2_REMOVE_LAST_BUILD default true"
   fi
-
-
+  if [ "${INPUT_PUBLISH2_COMMIT_HISTORY}" = "false" -a "${INPUT_PUBLISH2_PUSH_FORCE}" = "false" ]; then 
+    print_error "3108-2:You set publish2_commit_history:false , must set publish2_push_force:true at same time"
+  fi
 else
   echo "PUBLISH2 default false, if need you can publish different repo/branch"
 fi
-
-
-
 
 
 if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
@@ -474,58 +449,50 @@ if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
     echo "PUBLISH3_COMMIT_MESSAGE default Updated by gitbook-action and time"
     PUBLISH3_COMMIT_MESSAGE="Updated by gitbook-action `date '+%Y-%m-%d %H:%M:%S'`"
   fi
-
   if [ "${INPUT_PUBLISH3_HUB}" != "github.com"  ]; then 
     print_info "PUBLISH3_HUB provided"
   else
     echo "PUBLISH3_HUB default github.com"
   fi
-
   if [ "${INPUT_PUBLISH3_BRANCH}" != "gh-pages"  ]; then 
     print_info "PUBLISH3_BRANCH provided"
   else
     echo "PUBLISH3_BRANCH default gh-pages"
   fi
-
   if [ "${INPUT_PUBLISH3_DIR}" != "/"  ]; then 
     print_info "PUBLISH3_DIR provided"
   else
     echo "PUBLISH3_DIR default /"
   fi
-
   if [ "${INPUT_PUBLISH3_COMMIT_HISTORY}" != "true"  ]; then 
     print_info "PUBLISH3_COMMIT_HISTORY provided"
   else
     echo "PUBLISH3_COMMIT_HISTORY default true"
   fi
-
   if [ "${INPUT_PUBLISH3_CNAME}" != "null"  ]; then 
     print_info "PUBLISH3_CNAME provided"
   else
     echo "PUBLISH3_CNAME default null"
   fi
-
   if [ "${INPUT_PUBLISH3_PUSH_FORCE}" != "false"  ]; then 
     print_info "PUBLISH3_PUSH_FORCE provided"
   else
     echo "PUBLISH3_PUSH_FORCE default false"
   fi
-
   if [ "${INPUT_PUBLISH3_REMOVE_LAST_BUILD}" != "true"  ]; then 
     print_info "PUBLISH3_REMOVE_LAST_BUILD provided"
   else
     echo "PUBLISH3_REMOVE_LAST_BUILD default true"
   fi
-
-
+  if [ "${INPUT_PUBLISH3_COMMIT_HISTORY}" = "false" -a "${INPUT_PUBLISH3_PUSH_FORCE}" = "false" ] ; then 
+    print_error "3108-3:You set publish3_commit_history:false , must set publish3_push_force:true at same time"
+  fi
 else
   echo "PUBLISH3 default false, if need you can publish different repo/branch"
 fi
 
-
-
 echo "--------------------"
-echo "FOR git node npm"
+echo "FOR git node npm gitbook-cli"
 echo "----------"
 
 git config --global user.name ${GIT_NAME}
@@ -536,9 +503,11 @@ echo "node"
 node --version
 echo "npm"
 npm --version
-
-
-
+if [ -n "${INPUT_GITBOOK_CLI_VERSION}" ]; then 
+  npm install gitbook-cli@${INPUT_GITBOOK_CLI_VERSION}  -g
+else
+  echo "gitbook-cli 2.3.2"
+fi
 
 # git clone source from repo/branch
 # source is must have. source2 can be not 
@@ -551,29 +520,27 @@ mkdir local_source   #to store one or mix two source
 
 git clone -b ${INPUT_SOURCE_BRANCH} https://${SOURCE_GIT_NAME}:${SOURCE_TOKEN}@${INPUT_SOURCE_HUB}/${SOURCE_REPO}.git  local_source_temp
 
-if [ $? = 0 ]; then  # clone success
+if [ $? -eq 0 ]; then  # clone success
 
-  if ${INPUT_SOURCE_EDIT_TIME} ;  # Some plugins need last edit time
-  then
+  if [ ${INPUT_SOURCE_EDIT_TIME} = "true" ]; then  # Some plugins need last edit time
     cd local_source_temp
+    # https://serverfault.com/a/401450
     git ls-tree -r --name-only HEAD | while read filename; do
-      touch -d  "$(git log -1 --pretty=format:"%ai" )"  $filename ;
+      touch -d  "$(git log -1 --pretty=format:"%ai"  -- $filename  )"  $filename ;
     done
     cd ..
     print_info "Message:Source git clone success and time set success"
   fi
 
-  mv -f local_source_temp/${INPUT_SOURCE_DIR}/*  local_source # move source with source2 to build together 
-  if [ $? = 0 ]; then
+  cp -rfp local_source_temp/${INPUT_SOURCE_DIR}/*  local_source # move source with source2 to build together 
+  if [ $? -eq 0 ]; then
     print_info "Message:Source git clone and move success, prepare to build"
   else  # git clone success but the gitbook source dir set wrong
     print_error "3102:Source git clone success, but not find gitbook-source file in ${INPUT_SOURCE_DIR}"
-    exit 1
   fi
 
 else  # can't git clone 1. no repo 2.no auth
   print_error "3103:Can't find this source_repo/branch, maybe not add token or source_token(with access) in gitbook_action.yml"
-  exit 1
 fi
 
 
@@ -582,29 +549,28 @@ fi
 
 if [ ${INPUT_SOURCE2_REPO} != "null" ]; then
   git clone -b ${INPUT_SOURCE2_BRANCH} https://${SOURCE2_GIT_NAME}:${SOURCE2_TOKEN}@${INPUT_SOURCE2_HUB}/${SOURCE2_REPO}.git  local_source2_temp 
-  if [ $? = 0 ]; then
-    if ${INPUT_SOURCE2_EDIT_TIME} ;
-    then
+  if [ $? -eq 0 ]; then
+    if [ ${INPUT_SOURCE2_EDIT_TIME} = "true" ] ; then
       cd local_source2_temp
       git ls-tree -r --name-only HEAD | while read filename; do
-        touch -d  "$(git log -1 --pretty=format:"%ai" )"  $filename ;
+        touch -d  "$(git log -1 --pretty=format:"%ai"  -- $filename )"  $filename ;
       done
       cd ..
       print_info "Message:Source2 time set success"
     fi
 
-    mv -f local_source2_temp/${INPUT_SOURCE2_DIR}/*  local_source
+    cp -rfp local_source2_temp/${INPUT_SOURCE2_DIR}/*  local_source
 
-    if [ $? = 0 ]; then
+    if [ $? -eq 0 ]; then
       print_warning "3301:Source2 git success. It will replace what we git before, when have same file"
     else
       print_error "3102-2:Source2 git clone success, but not find gitbook-source file in ${INPUT_SOURCE2_DIR}"
-      exit 1
+      
     fi
 
   else 
     print_error "3103-2:Can't find this source2_repo/branch, maybe not add token_source2(with access) in gitbook_action.yml"
-    exit 1
+    
   fi
 fi
 
@@ -616,11 +582,11 @@ print_info "STEP3  git_clone_history_publish"
 echo "----------------------------"
 
 git clone -b ${INPUT_PUBLISH_BRANCH} https://${PUBLISH_GIT_NAME}:${PUBLISH_TOKEN}@${INPUT_PUBLISH_HUB}/${PUBLISH_REPO}.git  local_publish 
-if [ $? = 0 ]; then  # git clone this repo.branch success
+if [ $? -eq 0 ]; then  # git clone this repo.branch success
   print_info "Message:publish git success"
 else  # can't git clone this repo.branch try git clone this repo
   git clone  https://${PUBLISH_GIT_NAME}:${PUBLISH_TOKEN}@${INPUT_PUBLISH_HUB}/${PUBLISH_REPO}.git  local_publish 
-  if [ $? = 0 ]; then # clone repo success, create new branch
+  if [ $? -eq 0 ]; then # clone repo success, create new branch
     cd local_publish
     git checkout --orphan  ${INPUT_PUBLISH_BRANCH}
     git rm -rf .
@@ -630,7 +596,7 @@ else  # can't git clone this repo.branch try git clone this repo
     print_warning "3302:Can't find this publish_branch, but find this repo, we checkout new branch"
   else    # can't git clone 1. no repo 2.no auth
     print_error "3104:Can't find this publish_repo, maybe not add token or publish_token(with access) in gitbook_action.yml" 
-    exit 1
+    
   fi
 fi
 
@@ -638,11 +604,11 @@ fi
 # Can use loop, but for different function later(like backup), I'm not
 if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
   git clone -b ${INPUT_PUBLISH2_BRANCH} https://${PUBLISH2_GIT_NAME}:${PUBLISH2_TOKEN}@${INPUT_PUBLISH2_HUB}/${PUBLISH2_REPO}.git  local_publish2 
-  if [ $? = 0 ]; then
+  if [ $? -eq 0 ]; then
     print_info "Message:publish2 git success"
   else
     git clone  https://${PUBLISH2_GIT_NAME}:${PUBLISH2_TOKEN}@${INPUT_PUBLISH2_HUB}/${PUBLISH2_REPO}.git  local_publish2 
-    if [ $? = 0 ]; then
+    if [ $? -eq 0 ]; then
       cd local_publish2
       git checkout --orphan  ${INPUT_PUBLISH2_BRANCH}
       git rm -rf .
@@ -652,18 +618,18 @@ if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
       print_warning "3302-2:Can't find this publish2_branch, but find this repo, we checkout new branch"
     else
       print_error "3104-2:Can't find this publish2_repo, maybe not add publish2_token(with access) in gitbook_action.yml" 
-      exit 1
+      
     fi
   fi
 fi
 
 if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
   git clone -b ${INPUT_PUBLISH3_BRANCH} https://${PUBLISH3_GIT_NAME}:${PUBLISH3_TOKEN}@${INPUT_PUBLISH3_HUB}/${PUBLISH3_REPO}.git  local_publish3 
-  if [ $? = 0 ]; then
+  if [ $? -eq 0 ]; then
     print_info "Message:publish3 git success"
   else
     git clone  https://${PUBLISH3_GIT_NAME}:${PUBLISH3_TOKEN}@${INPUT_PUBLISH3_HUB}/${PUBLISH3_REPO}.git  local_publish3 
-    if [ $? = 0 ]; then
+    if [ $? -eq 0 ]; then
       cd local_publish3
       git checkout --orphan  ${INPUT_PUBLISH3_BRANCH}
       git rm -rf .
@@ -673,7 +639,7 @@ if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
       print_warning "3302-3:Can't find this publish3_branch, but find this repo, we checkout new branch"
     else
       print_error "3104-3:Can't find this publish3_repo, maybe not add publish3_token(with access) in gitbook_action.yml" 
-      exit 1
+      
     fi
   fi
 fi
@@ -681,95 +647,67 @@ fi
 
 
 echo "--------------------------------------------"
-print_info "STEP4  install_gitbook-cli_and_calibre(if need)"
-echo "----------------------------"
-
-
-npm install gitbook-cli@${INPUT_GITBOOK_CLI_VERSION}  -g
-
-
-# if need pdf install calibre
-if ${INPUT_GITBOOK_PDF} || ${INPUT_GITBOOK_EPUB} || ${INPUT_GITBOOK_MOBI} ;
-then
-    wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin	
-fi
-
-
-
-echo "--------------------------------------------"
-print_info "STEP5  build_gitbook_and_generate_file"
+print_info "STEP4  build_gitbook_and_generate_file"
 echo "-----------------------------------"
 
 cd local_source
 ls
 
-gitbook build --gitbook=$GB_VERSION
-if [ $? = 0 ]; then
+gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
+if [ $? -eq 0 ]; then
   print_info "Message:gitbook built success"
 else  # need plugins or README.md SUMMARY.md
   print_warning "3303:gitbook built fail, maybe need some file or plugins, now we try again"
   gitbook init
   gitbook install
-  gitbook build --gitbook=$GB_VERSION
-  if [ $? = 0 ]; then  # build again success with plugins
+  gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
+  if [ $? -eq 0 ]; then  # build again success with plugins
     print_info "Message:gitbook built success(with plugins)"
   else
     print_error "3105:gitbook built fail,please check is there something wrong with your book.json or others"
-    exit 1
+    
+  fi
+fi
+
+# install font
+if ${INPUT_GITBOOK_PDF} || ${INPUT_GITBOOK_EPUB} || ${INPUT_GITBOOK_MOBI} ; then
+  if [ -n "${INPUT_FONT_INSTALL}" ]; then 
+    apt-get update
+    apt-get install sudo -y
+    print_info "Message:Runing user's font_install"
+    ${INPUT_FONT_INSTALL}
+    #sudo apt-get install fonts-noto-cjk
+    #sudo apt-get install ttf-mscorefonts-installer
+  else
+    print_warning "3308:Not install any font, maybe affect the pdf/mobi/epub, can add font_install at book.json"
   fi
 fi
 
 # gitbook pdf
-if ${INPUT_GITBOOK_PDF}
-then
+if ${INPUT_GITBOOK_PDF} ; then
   mkdir -p _book/${INPUT_GITBOOK_PDF_DIR}
   gitbook pdf ./  ./_book/${INPUT_GITBOOK_PDF_DIR}/${INPUT_GITBOOK_PDF_NAME}.pdf
 fi
-if ${INPUT_GITBOOK_EPUB}
-then
+if ${INPUT_GITBOOK_EPUB} ; then
   mkdir -p _book/${INPUT_GITBOOK_EPUB_DIR}
-  gitbook pdf ./  ./_book/${INPUT_GITBOOK_PDF_DIR}/${INPUT_GITBOOK_EPUB_NAME}.pdf
+  gitbook epub ./  ./_book/${INPUT_GITBOOK_EPUB_DIR}/${INPUT_GITBOOK_EPUB_NAME}.epub
 fi
-if ${INPUT_GITBOOK_MOBI}
-then
+if ${INPUT_GITBOOK_MOBI} ; then
   mkdir -p _book/${INPUT_GITBOOK_MOBI_DIR}
-  gitbook pdf ./  ./_book/${INPUT_GITBOOK_MOBI_DIR}/${INPUT_GITBOOK_MOBI_NAME}.pdf
+  gitbook mobi ./  ./_book/${INPUT_GITBOOK_MOBI_DIR}/${INPUT_GITBOOK_MOBI_NAME}.mobi
 fi
 cd ..
 
 
 echo "--------------------------------------------"
-print_info "STEP6  push_to_pages"
+print_info "STEP5  push_to_pages"
 echo "--------------------------------------------"
 
-# if branch is new, need pubilsh_dir(if not /)
-
-if [ ! -d "local_publish/${INPUT_PUBLISH_DIR}" ]; then
-  mkdir local_publish/${INPUT_PUBLISH_DIR}
-fi
-
-#  need or not gitbook build history
-
-if  ${INPUT_PUBLISH_REMOVE_LAST_BUILD}
-then
-  # if gitbook_source is root need backup .git
-  if [ ${INPUT_PUBLISH_DIR} = "/" ]; then  
-    mv local_publish/${INPUT_PUBLISH_DIR}/.git  local_publish_git_temp
-  fi
-  rm -rf local_publish/${INPUT_PUBLISH_DIR}
-  mkdir local_publish/${INPUT_PUBLISH_DIR}
-  if [ ${INPUT_PUBLISH_DIR} = "/" ]; then
-    mv local_publish_git_temp local_publish/${INPUT_PUBLISH_DIR}/.git
-  fi
-fi
-
-
 # remove cname in source or source2
-
 if [ -f local_source/_book/CNAME ]; then 
   rm -rf local_source/_book/CNAME;
-  if [ $? = 0 ]; then
-    if [ "${INPUT_PUBLISH1_CNAME}" != "null" ] || [ "${INPUT_PUBLISH2_CNAME}" != "null" ] || [ "${INPUT_PUBLISH3_CNAME}" != "null" ] ; then
+  if [ $? -eq 0 ]; then
+    if [ "${INPUT_PUBLISH_CNAME}" != "null"  -o  "${INPUT_PUBLISH2_CNAME}" != "null"  -o  "${INPUT_PUBLISH3_CNAME}" != "null" ] ; then
       print_info "Message:Remove the CNAME(from source or source2) success"
     else
       print_warning "3304:Remove the CNAME(from source or source2), if need cname please add in gitbook_action.yml publish_cname:value"
@@ -777,109 +715,139 @@ if [ -f local_source/_book/CNAME ]; then
   fi
 fi
 
+######################### For publish #########################################
+
+# if branch is new, need pubilsh_dir(if not /)
+if [ ! -d "./local_publish/${INPUT_PUBLISH_DIR}" ] ; then
+  mkdir ./local_publish/${INPUT_PUBLISH_DIR}
+fi
+
+#  need or not gitbook build history
+if [ ${INPUT_PUBLISH_REMOVE_LAST_BUILD} = "true" ] ; then
+  cd local_publish
+  git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH_DIR}/*
+#  git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH_DIR}/.*
+  cd ..
+fi
 
 # move build file to each publish dir
-
 cp -rfp local_source/_book/*  local_publish/${INPUT_PUBLISH_DIR}
-
-
-#  need or not  publish commit history
 
 cd local_publish
 
-if ! ${INPUT_PUBLISH_COMMIT_HISTORY} # Clean commit history
-then
-  rm -rf ./.git
-  git init
-  git checkout -b ${INPUT_PUBLISH_BRANCH}
-fi
-
 # add CNAME which set in gitbook_action.yml
-
-
 if [ "${INPUT_PUBLISH_CNAME}" != "null" ]; then  # CNAME
   # can set different cname with '\n' or '  ' between them
   echo "${INPUT_PUBLISH_CNAME}" | sed 's/ /\n/g' | sed '/^[  ]*$/d' > CNAME
-  if [ $? = 0 ]; then
+  if [ $? -eq 0 ]; then
     print_info "Message:Create CNAME success"
   fi
 fi
 
-ls
-
-
+# git config
 git config --local user.name ${PUBLISH_GIT_NAME}
 git config --local user.email ${PUBLISH_GIT_EMAIL}
-git add *
-git commit -m "${PUBLISH_COMMIT_MESSAGE}"
+
+# git commit
+#  need or not  publish commit history
+if [ ${INPUT_PUBLISH_COMMIT_HISTORY} = "false" ]  ; then # Clean commit history
+# https://stackoverflow.com/a/26000395
+# Checkout
+  git checkout --orphan latest_branch
+# Add all the files
+  git add -A
+# Commit the changes
+  git commit -am "${PUBLISH_COMMIT_MESSAGE}"
+# Delete the branch
+  git branch -D ${INPUT_PUBLISH_BRANCH}
+# Rename the current branch
+  git branch -m ${INPUT_PUBLISH_BRANCH}
+# Finally, force update your repository
+# git push -f origin master
+# --------
+#  rm -rf ./.git
+#  git init
+#  git checkout -b ${INPUT_PUBLISH_BRANCH}
+  print_info "Message:Clean commit history success"
+else
+  git add *
+  git commit -m "${PUBLISH_COMMIT_MESSAGE}"
+fi
 
 
+# git push
 git push https://${PUBLISH_GIT_NAME}:${PUBLISH_TOKEN}@${INPUT_PUBLISH_HUB}/${PUBLISH_REPO}.git  ${INPUT_PUBLISH_BRANCH}:${INPUT_PUBLISH_BRANCH}
-if [ $? = 0 ]; then
+if [ $? -eq 0 ]; then
   print_info "Message:publish success"
-elif ${INPUT_PUBLISH_PUSH_FORCE} ; then  # try push force
+elif [ ${INPUT_PUBLISH_PUSH_FORCE}  = "true" ]  ; then  # try push force
   print_warning "3305:Can't push publish_repo/branch, try push force"
     git push --force https://${PUBLISH_GIT_NAME}:${PUBLISH_TOKEN}@${INPUT_PUBLISH_HUB}/${PUBLISH_REPO}.git  ${INPUT_PUBLISH_BRANCH}:${INPUT_PUBLISH_BRANCH}
-    if [ $? = 0 ]; then
+    if [ $? -eq 0 ]; then
       print_warning "3306:Push force success"
     else
       print_error "3106:Can't push publish_repo/branch, maybe not add publish_token(with access) in gitbook_action.yml"
-      exit 1
+      
     fi
 else
   print_error "3107:Can't push publish_repo/branch, maybe not add publish_token(with access) in gitbook_action.yml or try set publish_push_force true"
 fi
 cd ..
 
+
+######################### For publish2 #########################################
 # The following is the same with above except if.
 # Can use loop, but for different function later(like backup), I'm not
 
 if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
-  if [ ! -d "local_publish2/${INPUT_PUBLISH2_DIR}" ]; then
-    mkdir local_publish2/${INPUT_PUBLISH2_DIR}
+
+  if [ ! -d "./local_publish2/${INPUT_PUBLISH2_DIR}" ]; then
+    mkdir ./local_publish2/${INPUT_PUBLISH2_DIR}
   fi
 
-  if  ${INPUT_PUBLISH2_REMOVE_LAST_BUILD}
-  then
-    if [ ${INPUT_PUBLISH2_DIR} = "/" ]; then
-      mv local_publish2/${INPUT_PUBLISH2_DIR}/.git  local_publish2_git_temp
-    fi
-    rm -rf local_publish2/${INPUT_PUBLISH2_DIR}
-    mkdir local_publish2/${INPUT_PUBLISH2_DIR}
-    if [ ${INPUT_PUBLISH2_DIR} = "/" ]; then
-      mv local_publish2_git_temp local_publish2/${INPUT_PUBLISH2_DIR}/.git
-    fi
+#  need or not gitbook build history
+  if  [ ${INPUT_PUBLISH2_REMOVE_LAST_BUILD} = "true" ]  ; then
+    cd local_publish2
+    git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH2_DIR}/*
+#    git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH2_DIR}/.*
+    cd ..
   fi
 
   cp -rfp local_source/_book/*  local_publish2/${INPUT_PUBLISH2_DIR}
   cd local_publish2
-  if ! ${INPUT_PUBLISH2_COMMIT_HISTORY}
-  then 
-    rm -rf ./.git
-    git init
-    git checkout -b ${INPUT_PUBLISH2_BRANCH}
-  fi
+
   if [ "${INPUT_PUBLISH2_CNAME}" != "null" ]; then  # CNAME
     echo "${INPUT_PUBLISH2_CNAME}" | sed 's/ /\n/g' | sed '/^[  ]*$/d' > CNAME
-    if [ $? = 0 ]; then
+    if [ $? -eq 0 ]; then
       print_info "Message:Create Publish2_CNAME success"
     fi
   fi
+
   git config --local user.name ${PUBLISH2_GIT_NAME}
   git config --local user.email ${PUBLISH2_GIT_EMAIL}
-  git add *
-  git commit -m "${PUBLISH2_COMMIT_MESSAGE}"
+
+  if [ ${INPUT_PUBLISH2_COMMIT_HISTORY}  = "false" ] ; then 
+    git checkout --orphan latest_branch
+    git add -A
+    git commit -am "${PUBLISH2_COMMIT_MESSAGE}"
+    git branch -D ${INPUT_PUBLISH2_BRANCH}
+    git branch -m ${INPUT_PUBLISH2_BRANCH}
+    print_info "Message:Clean publish2 commit history sucess"
+  else
+    git add *
+    git commit -m "${PUBLISH2_COMMIT_MESSAGE}"
+  fi
+
   git push https://${PUBLISH2_GIT_NAME}:${PUBLISH2_TOKEN}@${INPUT_PUBLISH2_HUB}/${PUBLISH2_REPO}.git  ${INPUT_PUBLISH2_BRANCH}:${INPUT_PUBLISH2_BRANCH}
-  if [ $? = 0 ]; then
+  if [ $? -eq 0 ]; then
     print_info "Message:publish2 success"
-  elif ${INPUT_PUBLISH3_PUSH_FORCE} ; then
+  elif [ ${INPUT_PUBLISH2_PUSH_FORCE}  = "true" ] ; then
     print_warning "3305-2:Can't push publish2_repo/branch, try push force"
       git push --force https://${PUBLISH2_GIT_NAME}:${PUBLISH2_TOKEN}@${INPUT_PUBLISH2_HUB}/${PUBLISH2_REPO}.git  ${INPUT_PUBLISH2_BRANCH}:${INPUT_PUBLISH2_BRANCH}
-      if [ $? = 0 ]; then
+      if [ $? -eq 0 ]; then
         print_warning "3306-2:Push force success"
       else
         print_error "3016-2:Can't push publish2_repo/branch, maybe not add publish2_token(with access) in gitbook_action.yml"
-        exit 1
+        
       fi
   else
     print_error "3017-2:Can't push publish2_repo/branch, maybe not add publish2_token(with access) in gitbook_action.yml or try set publish2_push_force true"
@@ -887,62 +855,64 @@ if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
   cd ..
 fi
 
-
+######################### For publish3 #########################################
 
 if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
-  if [ ! -d "local_publish3/${INPUT_PUBLISH3_DIR}" ]; then
-    mkdir local_publish3/${INPUT_PUBLISH3_DIR}
+
+  if [ ! -d "./local_publish3/${INPUT_PUBLISH3_DIR}" ]; then
+    mkdir ./local_publish3/${INPUT_PUBLISH3_DIR}
   fi
 
-  if  ${INPUT_PUBLISH3_REMOVE_LAST_BUILD}
-  then
-    if [ ${INPUT_PUBLISH3_DIR} = "/" ]; then
-      mv local_publish3/${INPUT_PUBLISH3_DIR}/.git  local_publish3_git_temp
-    fi
-    rm -rf local_publish3/${INPUT_PUBLISH3_DIR}
-    mkdir local_publish3/${INPUT_PUBLISH3_DIR}
-    if [ ${INPUT_PUBLISH3_DIR} = "/" ]; then
-      mv local_publish3_git_temp local_publish3/${INPUT_PUBLISH3_DIR}/.git
-    fi
+#  need or not gitbook build history
+  if  [ ${INPUT_PUBLISH3_REMOVE_LAST_BUILD} = "true" ]  ; then
+    cd local_publish3
+    git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH3_DIR}/*
+#    git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH3_DIR}/.*
+    cd ..
   fi
 
   cp -rfp local_source/_book/*  local_publish3/${INPUT_PUBLISH3_DIR}
   cd local_publish3
-  if ! ${INPUT_PUBLISH3_COMMIT_HISTORY}
-  then 
-    rm -rf ./.git
-    git init
-    git checkout -b ${INPUT_PUBLISH3_BRANCH}
-  fi
+
   if [ "${INPUT_PUBLISH3_CNAME}" != "null" ]; then  # CNAME
-    echo "${INPUT_PUBLISH3_CNAME}"  | sed 's/ /\n/g' | sed '/^[  ]*$/d' > CNAME
-    if [ $? = 0 ]; then
+    echo "${INPUT_PUBLISH3_CNAME}" | sed 's/ /\n/g' | sed '/^[  ]*$/d' > CNAME
+    if [ $? -eq 0 ]; then
       print_info "Message:Create Publish3_CNAME success"
     fi
   fi
+
   git config --local user.name ${PUBLISH3_GIT_NAME}
   git config --local user.email ${PUBLISH3_GIT_EMAIL}
-  git add *
-  git commit -m "${PUBLISH3_COMMIT_MESSAGE}"
+
+  if [ ${INPUT_PUBLISH3_COMMIT_HISTORY}  = "false" ] ; then 
+    git checkout --orphan latest_branch
+    git add -A
+    git commit -am "${PUBLISH3_COMMIT_MESSAGE}"
+    git branch -D ${INPUT_PUBLISH3_BRANCH}
+    git branch -m ${INPUT_PUBLISH3_BRANCH}
+    print_info "Message:Clean publish3 commit history sucess"
+  else
+    git add *
+    git commit -m "${PUBLISH3_COMMIT_MESSAGE}"
+  fi
+
   git push https://${PUBLISH3_GIT_NAME}:${PUBLISH3_TOKEN}@${INPUT_PUBLISH3_HUB}/${PUBLISH3_REPO}.git  ${INPUT_PUBLISH3_BRANCH}:${INPUT_PUBLISH3_BRANCH}
-  if [ $? = 0 ]; then
+  if [ $? -eq 0 ]; then
     print_info "Message:publish3 success"
-  elif ${INPUT_PUBLISH3_PUSH_FORCE} ; then
+  elif [ ${INPUT_PUBLISH3_PUSH_FORCE}  = "true" ] ; then
     print_warning "3305-3:Can't push publish3_repo/branch, try push force"
       git push --force https://${PUBLISH3_GIT_NAME}:${PUBLISH3_TOKEN}@${INPUT_PUBLISH3_HUB}/${PUBLISH3_REPO}.git  ${INPUT_PUBLISH3_BRANCH}:${INPUT_PUBLISH3_BRANCH}
-      if [ $? = 0 ]; then
+      if [ $? -eq 0 ]; then
         print_warning "3306-3:Push force success"
       else
         print_error "3016-3:Can't push publish3_repo/branch, maybe not add publish3_token(with access) in gitbook_action.yml"
-        exit 1
+        
       fi
   else
     print_error "3017-3:Can't push publish3_repo/branch, maybe not add publish3_token(with access) in gitbook_action.yml or try set publish3_push_force true"
   fi
   cd ..
 fi
-
-
 
 # TODO prepare for other gitbook action (if two or more gitbook-action in one action)(local_source exists), but at same time remove the plugins file (node_modules) for cache, maybe can remove to one place
 
@@ -953,10 +923,9 @@ if [ "${INPUT_NOT_CLEAN}" = "false" ]; then
   rm -rf local_publish
   rm -rf local_publish2
   rm -rf local_publish3
-  if [ $? = 0 ]; then
+  if [ $? -eq 0 ]; then
     print_info "Message:Clean success"
   fi
 else
   print_warning "3307:NOT_CLEAN set true, if two gitbook-action in one workflow may run fatal. If don't use cache, (source build file-->node_modules), please set false(Default), and CLEAN is not remove gitbook-cli and gitbook"
 fi
-
