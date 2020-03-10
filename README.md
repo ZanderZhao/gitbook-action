@@ -154,9 +154,11 @@ not_clean
 
 ## FAQ
 
-[ERROR](https://zanderzhao.github.io/error.html)
+[Q&A](https://zanderzhao.github.io/gitbook-action#faq)
 
-[WARNING](https://zanderzhao.github.io/warning.html)
+[ERROR](https://zanderzhao.github.io/gitbook-action/error.html)
+
+[WARNING](https://zanderzhao.github.io/gitbook-action/warning.html)
 
 
 

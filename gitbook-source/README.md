@@ -461,9 +461,51 @@ jobs:
 
 ## FAQ   {#faq}
 
-[ERROR](https://zanderzhao.github.io/error.html)
+### [ERROR](https://zanderzhao.github.io/gitbook-action/error.html)
 
-[WARNING](https://zanderzhao.github.io/warning.html)
+### [WARNING](https://zanderzhao.github.io/gitbook-action/warning.html)
+
+### Q&A
+
++ About last edit time
+  + How to keep the last edit time ?
+    + Add `source_edit_time: true`
+
++ About CNAME
+  +  How to add CNAME ?
+     +  Add `publish_cname: www.example.com`
+     +  And add two CNAME like `publish_cname: example.com www.example.com`
+        +  `example.com` and `www.example.com`should have space.
+     +  [Github pages: custom-domain-names-that-are-unsupported](https://help.github.com/cn/github/working-with-github-pages/troubleshooting-custom-domains-and-github-pages#custom-domain-names-that-are-unsupported)
+
++ About PDF/EPUB/MOBI
+
+  + How to build pdf ?
+    + Add `gitbook_pdf: true`
+      + You can choose `gitbook_pdf_dir` and `gitbook_pdf_name`
+      + [Detail](https://zanderzhao.github.io/gitbook-action/#gitbooksetting)
+    + Why the font format is wrong ?
+      + You need install font, add `font_install`
+      + example: `font_install: sudo apt-get install fonts-noto-cjk`or`font_install: sudo apt-get install ttf-mscorefonts-installer`,use sudo install for global.
+
++ About source_repo
+
+  + source_repo is the repo where gitbook-source(SUMMARY.md README.md) deposit
+
+  + you can set `source_repo`、 `source_branch`and`source_dir`
+
+    + example: <https://github.com/GitbookIO/gitbook/tree/master/docs>
+
+```
+        source_repo: GitbookIO/gitbook
+        source_branch: master
+        source_dir: docs
+```
+
++ About publish_repo
+  + publish_repo is the file gitbook build push to
+  + you can set `publish_repo`、`publish_branch`and`publish_dir`
+  + This action **only change** the file in `publish_dir`
 
 
 
