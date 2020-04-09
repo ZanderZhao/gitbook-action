@@ -3,12 +3,6 @@
   "author": "Zander Zhao",
   "description": "Gitbook-Action",
   "gitbook": "3.2.3",
-  "links": {
-    "sidebar": {  
-        "# Marketplace": "https://github.com/marketplace/actions/gitbook-action",
-        "# Github": "https://github.com/ZanderZhao/gitbook-action"
-      }
-  },
   "plugins": [
     "-lunr",
     "-search",
@@ -19,8 +13,7 @@
     "mygitalk@git+https://github.com/plugins-zander/gitbook-plugin-mygitalk.git",
     "edit-link@git+https://github.com/plugins-zander/gitbook-plugin-edit-link.git",
     "sitemap-general@git+https://github.com/plugins-zander/gitbook-plugin-sitemap-general.git",
-    "tbfed-pagefooter@git+https://github.com/plugins-zander/gitbook-plugin-tbfed-pagefooter.git",
-    "todo@git+https://github.com/plugins-zander/gitbook-plugin-todo.git",
+    "gtag@git+https://github.com/plugins-zander/gitbook-plugin-gtag.git",
     "chapter-fold@git+https://github.com/plugins-zander/gitbook-plugin-chapter-fold.git",
     "copy-code-button@git+https://github.com/plugins-zander/gitbook-plugin-copy-code-button.git"
   ],
@@ -35,18 +28,15 @@
       ],
       "distractionFreeMode": false
     },
+    "gtag": {
+      "token": "UA-149127400-1"
+    },
     "edit-link": {
       "base": "https://github.com/ZanderZhao/gitbook-action/edit/master/gitbook-source",
       "label": "EDIT"
     },
     "sitemap-general": {
       "prefix": "https://zlogs.net/gitbook-action/"
-    },
-    "tbfed-pagefooter": {
-      "copyright": "Edit by Zander Zhao ; ",
-      "modify_bszlabel": "<span id=\"busuanzi_container_page_pv\">View Count: <span id=\"busuanzi_value_page_pv\"></span>  </span>",
-      "modify_label": "Last Edit:",
-      "modify_format": "YYYY-MM-DD HH:mm:ss"
     }
   }
 }

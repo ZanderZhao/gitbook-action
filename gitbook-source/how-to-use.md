@@ -2,9 +2,9 @@
 
  Add `.github/workflows/gitbook-action.yml`in your repo, with  following content.
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304203049.png)
+![](https://img1.zlogs.net/20/20200304203049.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304203445.png)
+![](https://img1.zlogs.net/20/20200304203445.png)
 
 
 ```
@@ -26,9 +26,9 @@ jobs:
 ```
 
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304204230.png)
+![](https://img1.zlogs.net/20/20200304204230.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304204602.png)
+![](https://img1.zlogs.net/20/20200304204602.png)
 
 
 
@@ -38,26 +38,26 @@ jobs:
 
 - click https://github.com/settings/tokens
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304205657.png)
+![](https://img1.zlogs.net/20/20200304205657.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304205817.png)
+![](https://img1.zlogs.net/20/20200304205817.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304210004.png)
+![](https://img1.zlogs.net/20/20200304210004.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304210104.png)
+![](https://img1.zlogs.net/20/20200304210104.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304210306.png)
+![](https://img1.zlogs.net/20/20200304210306.png)
 
 
 #### step2.2 Add token to repo {#addtoken}
 
 - go to  https://github.com/ **yourname/yourrepo** /settings/secrets
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304210813.png)
+![](https://img1.zlogs.net/20/20200304210813.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304210926.png)
+![](https://img1.zlogs.net/20/20200304210926.png)
 
-![](https://cdn.jsdelivr.net/gh/ZanderZhao/img20/file/20200304211301.png)
+![](https://img1.zlogs.net/20/20200304211301.png)
 
 
 
