@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -x
 
 
 #  print missage style
@@ -652,6 +652,15 @@ echo "-----------------------------------"
 
 cd local_source
 ls
+
+# prepare install
+if [ -n "${INPUT_PREPARE_INSTALL}" ]; then 
+  print_info "Message:Runing user's prepare_install"
+  ${INPUT_PREPARE_INSTALL}
+  # npm i --unsafe-perm -g svgexport@0.3.2
+else
+  echo "no prepare_install"
+fi
 
 gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
 if [ $? -eq 0 ]; then

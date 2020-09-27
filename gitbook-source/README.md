@@ -233,11 +233,17 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
   + description: ''
   + default: 'ebook'
+
 + **font_install**
-  + description: ''Install font for pdf, Not install any font, maybe affect the pdf/mobi/epub, can add font_install at book.json"
+  + description: 'Install font for pdf, Not install any font, maybe affect the pdf/mobi/epub, can add font_install at book.json'
   + example: `sudo apt-get install fonts-noto-cjk`or`sudo apt-get install ttf-mscorefonts-installer`,use sudo install for global.
+
 + **not_clean**
   + description: 'Default false. Set true  will not remove working file when the workflow finish, if you set cache'
+
++ **prepare_install**
+  + description: 'Some install for prepare, such as dependency, golbal setting'
+  + example: `npm i --unsafe-perm -g svgexport@0.3.2`,install specific svgexport version for converting svg.
 
 ### For other repo   {#otherrepo}
 
@@ -415,6 +421,7 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
   + description: 'set false will only one commit at publish3_repo'
   + default:  true
+
 
 ## Example  {#example}
 

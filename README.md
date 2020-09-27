@@ -103,6 +103,9 @@ gitbook_epub_name
 gitbook_mobi
 gitbook_mobi_dir
 gitbook_mobi_name
+font_install
+not_clean
+prepare_install
 
 # for source2
 source2_repo
@@ -140,8 +143,6 @@ publish3_dir
 publish3_cname
 publish3_push_force
 publish3_remove_last_build
-font_install
-not_clean
 ```
 
 
