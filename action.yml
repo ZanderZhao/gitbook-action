@@ -248,6 +248,9 @@ inputs:
   font_install:
     description: 'Install font for pdf'
     required: false
+  prepare_install:
+    description: 'Some install for prepare'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -319,3 +322,4 @@ runs:
     - ${{ inputs.publish3_remove_last_build }}
     - ${{ inputs.not_clean }}
     - ${{ inputs.font_install }}
+    - ${{ inputs.prepare_install }}
