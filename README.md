@@ -2,6 +2,8 @@
 
 This action builds and publishes a gitbook to github pages and other pages. [Click here for more information](https://ZanderZhao.github.io/gitbook-action). 
 
+> [GitHub](https://github.com/ZanderZhao/gitbook-action) | [MarketPlace](https://github.com/marketplace/actions/gitbook-action) | [Page](https://ZanderZhao.github.io/gitbook-action/) | [Community](https://gitter.im/Gitbook-Action/community)
+
 ## How to Use
 
 ### **STEP1** Add Action
@@ -21,9 +23,9 @@ jobs:
     - name: Checkout action
       uses: actions/checkout@v2
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2.2
-      with:
-        token: ${{ secrets.PERSONAL_TOKEN }}
+      uses: ZanderZhao/gitbook-action@v1.2.3  # -> or ZanderZhao/gitbook-action@master 
+      with:                                   #    or fork this repo and use YourName/gitbook-action@master
+        token: ${{ secrets.PERSONAL_TOKEN }}  # -> remember add this in settings/secrets as following
 ```
 
 ​    [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addaction)    [Official introduction](https://help.github.com/cn/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)

@@ -2,6 +2,10 @@
 
 This action builds and publishes a gitbook to github pages and other pages. [Click here for more information](https://ZanderZhao.github.io/gitbook-action). 
 
+> [GitHub](https://github.com/ZanderZhao/gitbook-action) | [MarketPlace](https://github.com/marketplace/actions/gitbook-action) | [Page](https://ZanderZhao.github.io/gitbook-action/) | [Community](https://gitter.im/Gitbook-Action/community)
+
+
+
 ## How to Use
 
 ### **STEP1** Add Action
@@ -21,9 +25,9 @@ jobs:
     - name: Checkout action
       uses: actions/checkout@v2
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2.2
-      with:
-        token: ${{ secrets.PERSONAL_TOKEN }}
+      uses: ZanderZhao/gitbook-action@v1.2.3  # -> or ZanderZhao/gitbook-action@master 
+      with:                                   #    or fork this repo and use YourName/gitbook-action@master
+        token: ${{ secrets.PERSONAL_TOKEN }}  # -> remember add this in settings/secrets as following
 ```
 
 ​    [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addaction)    [Official introduction](https://help.github.com/cn/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)
@@ -543,6 +547,27 @@ jobs:
   + publish_repo is the file gitbook build push to
   + you can set `publish_repo`、`publish_branch`and`publish_dir`
   + This action **only change** the file in `publish_dir`
++ About work
+  + Pull docker from [docker](https://hub.docker.com/r/zanderzhao/gitbook-action/dockerfile)
+    + In which Gitbook and Tools has installed 
+  + Clone from publish 
+    +  If exists publish2 and publish3 
+      + Then clone publish2 and publish3 
+      + Mix publish, publish2 and publish3  together
+  + Build
+    + If exists plugins
+      + install plugins
+    + if need pdf
+      + if set font
+        + install font if you set before
+      + build pdf
+  + Publish
+    + Publish to publish_repo
+    + If exists publish2 or publish3, then publish
+  + Clean
+    + It will clean all things, If you need cache can set false, and you can find detail in OPTION above
+
+
 
 
 
