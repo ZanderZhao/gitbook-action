@@ -71,7 +71,30 @@
   + set publish_commit_history:false , must set publish_push_force:true at same time
 
 
+3201
 
++ description [Unable to publish to github pages](https://github.com/ZanderZhao/gitbook-action/issues/4)
+  
+  + The workflows run successfully, and push for gh-pages successfully, **But** the github **pages build failed**
+  
+  + ```
+    //From Settings
+    Your site is having problems building: Page build failed. For more information, see https://docs.github.com/github/working-with-github-pages/troubleshooting-jekyll-build-errors-for-github-pages-sites#troubleshooting-build-errors.
+    ```
+  
++ Why
+
+  + 1:There is something wrong with the page build with `jekyll`.
+  + 2:If you add `.nojekyll` in source but use the version of gitbook action is 1.2.2 or early, which use `cp -rfp ./*  /` will ignore the `.nojekyll` , can cause this.
+
++ How to Fix
+
+  + step1
+    + use   `zanderzhao/gitbook-action@master` 
+    + or `zanderzhao/gitbook-action@1.2.3` or latest
+  + step2
+    + add`.nojekyll` in source
+    + or add `publish_nojekyll: true` at action config
 
 
 

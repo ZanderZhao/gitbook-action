@@ -24,7 +24,10 @@
 
 * [Example](README.md#example)
 * [FAQ](README.md#faq)
-  * [ERROR](error.md)
-  * [WARNING](warning.md)
+* [ERROR](error.md)
+* [WARNING](warning.md)
 * [Community](README.md#community)
 * [External links](README.md#external)
+
+
+

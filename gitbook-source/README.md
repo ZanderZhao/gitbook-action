@@ -109,6 +109,12 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
   + default: false
 
++ **source_file_without_prefix**:
+
+  + description: 'Default true, if you want to ignore file without prefix please set false'
+
+  + default: true
+
 ### For Publish Repo   {#publish}
 
 + **publish_repo**:
@@ -164,6 +170,13 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
   + description: 'Default null'
 
   + default:  'null'
+
++ **publish_nojekyll**:
+
+  + description: 'Default false, if set true, it will add .nojekyll for publish'
+
+  + default:  'false'
+
 
 + **publish_push_force**:
 
@@ -286,6 +299,12 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
   + default: false
 
++ **source2_file_without_prefix**:
+
+  + description: 'Default true, if you want to ignore file without prefix please set false'
+
+  + default: true
+
 #### For Publish2 repo   {#publish2}
 
 + **publish2_repo**:
@@ -353,6 +372,12 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
   + description: 'set false will only one commit at publish2_repo'
 
   + default:  true
+
++ **publish2_nojekyll**:
+
+  + description: 'Default false, if set true, it will add .nojekyll for publish2'
+
+  + default:  'false'
 
 #### For Publish3 repo   {#publish3}
 
@@ -422,6 +447,11 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
   + description: 'set false will only one commit at publish3_repo'
   + default:  true
 
++ **publish3_nojekyll**:
+
+  + description: 'Default false, if set true, it will add .nojekyll for publish3'
+
+  + default:  'false'
 
 ## Example  {#example}
 

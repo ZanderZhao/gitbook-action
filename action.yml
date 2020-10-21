@@ -42,6 +42,10 @@ inputs:
     description: 'Default false, if plugins need last edit time, set true'
     required: false
     default: false
+  source_file_without_prefix:
+    description: 'Default true, if you want to ignore file without prefix please set false'
+    required: true
+    default: true
   publish_token:
     description: 'Default token, if not please add (clone push)'
     required: false
@@ -77,6 +81,10 @@ inputs:
     description: 'Default null, can set www.example.com example.com ...'
     required: false
     default:  'null'
+  publish_nojekyll:
+    description: 'Default false, if set true, it will add .nojekyll for publish'
+    required: false
+    default:  'false'
   publish_push_force:
     description: 'Default false. Set true will enable git push force'
     required: false
@@ -153,6 +161,10 @@ inputs:
     description: 'Default false if plugins need last edit time, set true'
     required: false
     default: false
+  source2_file_without_prefix:
+    description: 'Default true, if you want to ignore file without prefix please set false'
+    required: true
+    default: true
   publish2_git_name:
     description: 'Default git_name, if not please add'
     required: false
@@ -177,6 +189,10 @@ inputs:
     description: 'Default gh-pages'
     required: false
     default: 'gh-pages'
+  publish2_nojekyll:
+    description: 'Default false, if set true, it will add .nojekyll for publish2'
+    required: false
+    default:  'false'
   publish2_dir:
     description: ''
     required: false
@@ -229,6 +245,10 @@ inputs:
     description: 'Default null'
     required: false
     default:  'null'
+  publish3_nojekyll:
+    description: 'Default false, if set true, it will add .nojekyll for publish3'
+    required: false
+    default:  'false'
   publish3_push_force:
     description: 'Default false. Set true will enable git push force'
     required: false
@@ -266,6 +286,7 @@ runs:
     - ${{ inputs.source_branch }}
     - ${{ inputs.source_dir }}
     - ${{ inputs.source_edit_time }}
+    - ${{ inputs.source_file_without_prefix }}
     - ${{ inputs.publish_token }}
     - ${{ inputs.publish_git_name }}
     - ${{ inputs.publish_git_email }}
@@ -276,6 +297,7 @@ runs:
     - ${{ inputs.publish_dir }}
     - ${{ inputs.publish_commit_history }}
     - ${{ inputs.publish_cname }}
+    - ${{ inputs.publish_nojekyll }}
     - ${{ inputs.publish_push_force }}
     - ${{ inputs.publish_remove_last_build }}
     - ${{ inputs.gitbook_cli_version }}
@@ -296,6 +318,7 @@ runs:
     - ${{ inputs.source2_branch }}
     - ${{ inputs.source2_dir }}
     - ${{ inputs.source2_edit_time }}
+    - ${{ inputs.source2_file_without_prefix }}
     - ${{ inputs.publish2_git_name }}
     - ${{ inputs.publish2_token }}
     - ${{ inputs.publish2_git_email }}
@@ -306,6 +329,7 @@ runs:
     - ${{ inputs.publish2_commit_history }}
     - ${{ inputs.publish2_dir }}
     - ${{ inputs.publish2_cname }}
+    - ${{ inputs.publish2_nojekyll }}
     - ${{ inputs.publish2_push_force }}
     - ${{ inputs.publish2_remove_last_build }}
     - ${{ inputs.publish3_git_name }}
@@ -318,6 +342,7 @@ runs:
     - ${{ inputs.publish3_commit_history }}
     - ${{ inputs.publish3_dir }}
     - ${{ inputs.publish3_cname }}
+    - ${{ inputs.publish3_nojekyll }}
     - ${{ inputs.publish3_push_force }}
     - ${{ inputs.publish3_remove_last_build }}
     - ${{ inputs.not_clean }}

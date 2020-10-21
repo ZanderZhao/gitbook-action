@@ -39,6 +39,13 @@
 
 
 
+3305-0
+
++ Just tell you, You ALLOW PUSH FORCE
+  + If work with others, try avoid it. 
+
+
+
 3305  3305-2  3305-3
 
 + Can't push publish_repo/branch, try push force
