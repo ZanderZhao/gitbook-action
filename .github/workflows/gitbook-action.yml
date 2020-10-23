@@ -13,10 +13,10 @@ jobs:
       uses: actions/checkout@v2
 
     # example1
-    - name: Gitbook Action
-      uses: ZanderZhao/gitbook-action@v1.2.3  # -> or ZanderZhao/gitbook-action@master 
-      with:                                                              #      or fork this repo and use YourName/gitbook-action@master
-        token: ${{ secrets.PERSONAL_TOKEN }}    # -> remember add this in settings/secrets as https://ZanderZhao.github.io/gitbook-action/
+    - name: Gitbook Action # https://github.com/ZanderZhao/gitbook-action/releases
+      uses: ZanderZhao/gitbook-action@master  # -> or ZanderZhao/gitbook-action@v1.2.4, Just example, click above, use latest please
+      with:                                   #    or fork this repo and use YourName/gitbook-action@master
+        token: ${{ secrets.PERSONAL_TOKEN }}  # -> remember add this in settings/secrets as https://ZanderZhao.github.io/gitbook-action/
         time_zone: Asia/Shanghai
         source_dir: gitbook-source
         source_edit_time: true
@@ -32,7 +32,5 @@ jobs:
         source_branch: master
         source_dir: docs
         publish_dir: gitbook-docs
-        publish2_repo: gitbook-org/gitbook 
-
-
+        publish2_repo: gitbook-org/gitbook
 

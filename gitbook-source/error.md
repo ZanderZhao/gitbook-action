@@ -23,7 +23,7 @@
   + can't git clone repo
   + maybe not exists this `source_repo`
   + or you don't add `token` 
-  + or the `token` or`source_token`without oath
+  + or the `token` or`source_token`without auth
 
 
 
@@ -51,7 +51,7 @@
 
 + Can't push publish_repo/branch, maybe not add publish_token(with access) in gitbook_action.yml
   + can't push and push force sucess
-  + maybe your token without oath to push this repo
+  + maybe your token without auth to push this repo
 
 
 
@@ -59,7 +59,7 @@
 
 + Can't push publish_repo/branch, maybe not add publish_token(with access) in gitbook_action.yml or try set publish_push_force true
   + can't push sucess
-  + maybe your token without oath to push this repo
+  + maybe your token without auth to push this repo
   + or try to allow push force, add `publish_push_force: true`
 
 
@@ -73,7 +73,7 @@
 
 3201
 
-+ description [Unable to publish to github pages](https://github.com/ZanderZhao/gitbook-action/issues/4)
++ description [Publish sucessfully, But Github pages build fail](https://github.com/ZanderZhao/gitbook-action/issues/4)
   
   + The workflows run successfully, and push for gh-pages successfully, **But** the github **pages build failed**
   
@@ -91,7 +91,7 @@
 
   + step1
     + use   `zanderzhao/gitbook-action@master` 
-    + or `zanderzhao/gitbook-action@1.2.3` or latest
+    + or `zanderzhao/gitbook-action@v1.2.4` or latest
   + step2
     + add`.nojekyll` in source
     + or add `publish_nojekyll: true` at action config

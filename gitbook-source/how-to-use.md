@@ -20,7 +20,7 @@ jobs:
     - name: Checkout action
       uses: actions/checkout@v2
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2.2
+      uses: zanderzhao/gitbook-action@v1.2.4
       with:
         token: ${{ secrets.PERSONAL_TOKEN }}
 ```

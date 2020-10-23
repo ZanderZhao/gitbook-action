@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-
+####################### prepare  sh config ###############################
 #  print missage style
 # error 31XX
 print_error(){
@@ -18,6 +18,7 @@ print_warning(){
   echo  "\033[32m Find Detail From: https://ZanderZhao.github.io/gitbook-action/warning \033[0m"
 }
 
+################################ prepare global config and show config ###############################
 # prepare var and env
 echo "--------------------------------------------"
 print_info "STEP1  env_config"
@@ -520,6 +521,8 @@ else
   echo "PUBLISH3 default false, if need you can publish different repo/branch"
 fi
 
+# install gitbook if not default version
+
 echo "--------------------"
 echo "FOR git node npm gitbook-cli"
 echo "----------"
@@ -537,6 +540,9 @@ if [ -n "${INPUT_GITBOOK_CLI_VERSION}" ]; then
 else
   echo "gitbook-cli 2.3.2"
 fi
+
+
+######################## clone source ###################################3
 
 # git clone source from repo/branch
 # source is must have. source2 can be not 
@@ -614,6 +620,8 @@ if [ ${INPUT_SOURCE2_REPO} != "null" ]; then
   fi
 fi
 
+########################### clone publish branch ####################################
+# maybe different repo and need history before or be a part of repo 
 
 # git clone publish history, prepare for the gitbook build file is apart of other object
 
@@ -684,11 +692,12 @@ if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
   fi
 fi
 
-
+################ Build #################################3
 
 echo "--------------------------------------------"
 print_info "STEP4  build_gitbook_and_generate_file"
 echo "-----------------------------------"
+
 
 cd local_source
 ls
@@ -697,25 +706,10 @@ ls
 if [ -n "${INPUT_PREPARE_INSTALL}" ]; then 
   print_info "Message:Runing user's prepare_install"
   ${INPUT_PREPARE_INSTALL}
-  # npm i --unsafe-perm -g svgexport@0.3.2
+  # just like npm i --unsafe-perm -g svgexport@0.3.2
+  # which has been installed before ? -> https://hub.docker.com/r/zanderzhao/gitbook-action/dockerfile
 else
   echo "no prepare_install"
-fi
-
-gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
-if [ $? -eq 0 ]; then
-  print_info "Message:gitbook built success"
-else  # need plugins or README.md SUMMARY.md
-  print_warning "3303:gitbook built fail, maybe need some file or plugins, now we try again"
-  gitbook init
-  gitbook install
-  gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
-  if [ $? -eq 0 ]; then  # build again success with plugins
-    print_info "Message:gitbook built success(with plugins)"
-  else
-    print_error "3105:gitbook built fail,please check is there something wrong with your book.json or others"
-    
-  fi
 fi
 
 # install font
@@ -731,6 +725,23 @@ if ${INPUT_GITBOOK_PDF} || ${INPUT_GITBOOK_EPUB} || ${INPUT_GITBOOK_MOBI} ; then
     print_warning "3308:Not install any font, maybe affect the pdf/mobi/epub, can add font_install at book.json"
   fi
 fi
+
+gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
+if [ $? -eq 0 ]; then
+  print_info "Message:gitbook built success"
+else  # need plugins or README.md SUMMARY.md
+  print_warning "3303:gitbook built fail, maybe need some file or plugins, now we try again"
+  gitbook init
+  gitbook install
+  gitbook build --gitbook=${GITBOOK_BUILD_VERSION}
+  if [ $? -eq 0 ]; then  # build again success with plugins
+    print_info "Message:gitbook built success(with plugins)"
+  else
+    print_error "3105:gitbook built fail,please check is there something wrong with your book.json or others"
+  fi
+fi
+
+
 
 # gitbook pdf
 if ${INPUT_GITBOOK_PDF} ; then
@@ -753,6 +764,8 @@ print_info "STEP5  push_to_pages"
 echo "--------------------------------------------"
 
 # remove cname in source or source2
+# why? maybe use other src_repo which we can't  control whether it has cname before
+# if need cname please add at config
 if [ -f local_source/_book/CNAME ]; then 
   rm -rf local_source/_book/CNAME;
   if [ $? -eq 0 ]; then
@@ -766,17 +779,22 @@ fi
 
 ######################### For publish #########################################
 
-# if branch is new, need pubilsh_dir(if not /)
-if [ ! -d "./local_publish/${INPUT_PUBLISH_DIR}" ] ; then
-  mkdir ./local_publish/${INPUT_PUBLISH_DIR}
-fi
 
-#  need or not gitbook build history
+###  need or not gitbook build history
+#  I want use this config setting keep build history to get different time https://github.com/ZanderZhao/gitbook-action/issues/1
+#  But I fine it can't work, because some plugins still use the time when the action git clone src
+#  So I use https://github.com/Dream4ever/Knowledge-Base/issues/69 replace it like 'source_edit_time'
 if [ ${INPUT_PUBLISH_REMOVE_LAST_BUILD} = "true" ] ; then
   cd local_publish
   git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH_DIR}/*
 #  git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH_DIR}/.*
   cd ..
+fi
+
+# if branch is new, need pubilsh_dir(if not /)  or rm by this action before
+# this is below INPUT_PUBLISH_REMOVE_LAST_BUILD -> https://github.com/ZanderZhao/gitbook-action/issues/5
+if [ ! -d "./local_publish/${INPUT_PUBLISH_DIR}" ] ; then
+  mkdir ./local_publish/${INPUT_PUBLISH_DIR} 
 fi
 
 # move build file to each publish dir
@@ -793,6 +811,7 @@ if [ "${INPUT_PUBLISH_CNAME}" != "null" ]; then  # CNAME
   fi
 fi
 
+# may push sucessfully, but built fail, try use this option in config -> https://github.com/ZanderZhao/gitbook-action/issues/4
 if [ "${INPUT_PUBLISH_NOJEKYLL}" != "false" ]; then  # add .nojekyll
   touch .nojekyll
   if [ $? -eq 0 ]; then
@@ -801,29 +820,30 @@ if [ "${INPUT_PUBLISH_NOJEKYLL}" != "false" ]; then  # add .nojekyll
 fi
 
 # git config
+# maybe someone need different name for publish
 git config --local user.name ${PUBLISH_GIT_NAME}
 git config --local user.email ${PUBLISH_GIT_EMAIL}
 
 # git commit
 #  need or not  publish commit history
 if [ ${INPUT_PUBLISH_COMMIT_HISTORY} = "false" ]  ; then # Clean commit history
-# https://stackoverflow.com/a/26000395
-# Checkout
+  # https://stackoverflow.com/a/26000395
+  # Checkout
   git checkout --orphan latest_branch
-# Add all the files
+  # Add all the files
   git add .
-# Commit the changes
+  # Commit the changes
   git commit -am "${PUBLISH_COMMIT_MESSAGE}"
-# Delete the branch
+  # Delete the branch
   git branch -D ${INPUT_PUBLISH_BRANCH}
-# Rename the current branch
+  # Rename the current branch
   git branch -m ${INPUT_PUBLISH_BRANCH}
-# Finally, force update your repository
-# git push -f origin master
-# --------
-#  rm -rf ./.git
-#  git init
-#  git checkout -b ${INPUT_PUBLISH_BRANCH}
+  # Finally, force update your repository
+  # git push -f origin master
+  # --------
+  #  rm -rf ./.git
+  #  git init
+  #  git checkout -b ${INPUT_PUBLISH_BRANCH}
   print_info "Message:Clean commit history success"
 else
   git add .
@@ -842,7 +862,6 @@ elif [ ${INPUT_PUBLISH_PUSH_FORCE}  = "true" ]  ; then  # try push force
       print_warning "3306:Push force success"
     else
       print_error "3106:Can't push publish_repo/branch, maybe not add publish_token(with access) in gitbook_action.yml"
-      
     fi
 else
   print_error "3107:Can't push publish_repo/branch, maybe not add publish_token(with access) in gitbook_action.yml or try set publish_push_force true"
@@ -851,14 +870,11 @@ cd ..
 
 
 ######################### For publish2 #########################################
+# why publish2 exists ? maybe someone need publish for different place, eg gitlib.
 # The following is the same with above except if.
-# Can use loop, but for different function later(like backup), I'm not
+# Can use loop, but for different function later(like backup), I'm not now
 
 if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
-
-  if [ ! -d "./local_publish2/${INPUT_PUBLISH2_DIR}" ]; then
-    mkdir ./local_publish2/${INPUT_PUBLISH2_DIR}
-  fi
 
 #  need or not gitbook build history
   if  [ ${INPUT_PUBLISH2_REMOVE_LAST_BUILD} = "true" ]  ; then
@@ -866,6 +882,10 @@ if [ ${INPUT_PUBLISH2_REPO} != "null" ]; then
     git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH2_DIR}/*
 #    git rm -rf --ignore-unmatch  ./${INPUT_PUBLISH2_DIR}/.*
     cd ..
+  fi
+
+  if [ ! -d "./local_publish2/${INPUT_PUBLISH2_DIR}" ]; then
+    mkdir ./local_publish2/${INPUT_PUBLISH2_DIR}
   fi
 
   cp -rfp local_source/_book/.  local_publish2/${INPUT_PUBLISH2_DIR}
@@ -922,9 +942,7 @@ fi
 
 if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
 
-  if [ ! -d "./local_publish3/${INPUT_PUBLISH3_DIR}" ]; then
-    mkdir ./local_publish3/${INPUT_PUBLISH3_DIR}
-  fi
+
 
 #  need or not gitbook build history
   if  [ ${INPUT_PUBLISH3_REMOVE_LAST_BUILD} = "true" ]  ; then
@@ -934,6 +952,10 @@ if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
     cd ..
   fi
 
+  if [ ! -d "./local_publish3/${INPUT_PUBLISH3_DIR}" ]; then
+    mkdir ./local_publish3/${INPUT_PUBLISH3_DIR}
+  fi
+  
   cp -rfp local_source/_book/.  local_publish3/${INPUT_PUBLISH3_DIR}
   cd local_publish3
 
@@ -985,7 +1007,8 @@ if [ ${INPUT_PUBLISH3_REPO} != "null" ]; then
   cd ..
 fi
 
-# TODO prepare for other gitbook action (if two or more gitbook-action in one action)(local_source exists), but at same time remove the plugins file (node_modules) for cache, maybe can remove to one place
+# TODO prepare for other gitbook action (if two or more gitbook-action in one action)(local_source exists), 
+# but at same time remove the plugins file (node_modules) for cache, maybe can remove to one place
 
 if [ "${INPUT_NOT_CLEAN}" = "false" ]; then 
   rm -rf local_source

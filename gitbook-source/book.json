@@ -10,7 +10,6 @@
     "theme-simple@git+https://github.com/plugins-zander/gitbook-plugin-theme-simple.git",
     "search-pro@git+https://github.com/plugins-zander/gitbook-plugin-search-pro.git",
     "splitter@git+https://github.com/plugins-zander/gitbook-plugin-splitter.git",
-    "mygitalk@git+https://github.com/plugins-zander/gitbook-plugin-mygitalk.git",
     "edit-link@git+https://github.com/plugins-zander/gitbook-plugin-edit-link.git",
     "sitemap-general@git+https://github.com/plugins-zander/gitbook-plugin-sitemap-general.git",
     "gtag@git+https://github.com/plugins-zander/gitbook-plugin-gtag.git",
@@ -18,16 +17,6 @@
     "copy-code-button@git+https://github.com/plugins-zander/gitbook-plugin-copy-code-button.git"
   ],
   "pluginsConfig": {
-    "mygitalk": {
-      "clientID": "364365ceb2659b383d73",
-      "clientSecret": "447ef6648e9dfffe2e2a65c34c8ead1dd4b7af54",
-      "repo": "talk",
-      "owner": "zanderzhao",
-      "admin": [
-        "zanderzhao"
-      ],
-      "distractionFreeMode": false
-    },
     "gtag": {
       "token": "UA-149127400-1"
     },

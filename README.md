@@ -22,13 +22,13 @@ jobs:
     steps:
     - name: Checkout action
       uses: actions/checkout@v2
-    - name: Gitbook Action
-      uses: ZanderZhao/gitbook-action@v1.2.3  # -> or ZanderZhao/gitbook-action@master 
+    - name: Gitbook Action           # https://github.com/ZanderZhao/gitbook-action/releases
+      uses: ZanderZhao/gitbook-action@v1.2.4  # -> or ZanderZhao/gitbook-action@master.  If not use master click above, use latest please 
       with:                                   #    or fork this repo and use YourName/gitbook-action@master
         token: ${{ secrets.PERSONAL_TOKEN }}  # -> remember add this in settings/secrets as following
 ```
 
-​    [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addaction)    [Official introduction](https://help.github.com/cn/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)
+​    [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addaction)  |  [Official introduction](https://help.github.com/cn/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)
 
 ### **STEP2**  Generate Token and add to Secrets
 
@@ -37,14 +37,14 @@ Create token from https://github.com/settings/tokens
 + choose repo
 + click Generate token
 
-​       [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#createtoken)    [Official introduction](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token)
+​       [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#createtoken)  |  [Official introduction](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token)
 
 Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
 + Name: PERSONAL_TOKEN
 + Value: which you get before
 
-​       [Detail step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addtoken)    [Official introduction](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets)
+​       [Detail step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addtoken)  |  [Official introduction](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets)
 
 
 ### **STEP3** Choose options

@@ -24,13 +24,13 @@ jobs:
     steps:
     - name: Checkout action
       uses: actions/checkout@v2
-    - name: Gitbook Action
-      uses: ZanderZhao/gitbook-action@v1.2.3  # -> or ZanderZhao/gitbook-action@master 
+    - name: Gitbook Action                    # https://github.com/ZanderZhao/gitbook-action/releases
+      uses: ZanderZhao/gitbook-action@v1.2.4  # -> or ZanderZhao/gitbook-action@master.If not use master click above, use latest please 
       with:                                   #    or fork this repo and use YourName/gitbook-action@master
         token: ${{ secrets.PERSONAL_TOKEN }}  # -> remember add this in settings/secrets as following
 ```
 
-​    [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addaction)    [Official introduction](https://help.github.com/cn/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)
+​    [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addaction)  |  [Official introduction](https://help.github.com/cn/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)
 
 ### **STEP2**  Generate Token and add to Secrets
 
@@ -39,14 +39,14 @@ Create token from https://github.com/settings/tokens
 + choose repo
 + click Generate token
 
-​       [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#createtoken)    [Official introduction](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token)
+​       [Detailed step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#createtoken) |   [Official introduction](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token)
 
 Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
 + Name: PERSONAL_TOKEN
 + Value: which you get before
 
-​       [Detail step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addtoken)    [Official introduction](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets)
+​       [Detail step](https://zanderzhao.github.io/gitbook-action/how-to-use.html#addtoken)  |  [Official introduction](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets#creating-encrypted-secrets)
 
 ### **STEP3** Choose options
 
@@ -90,11 +90,10 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
 
 + **source_hub**:
-
-  + description: 'default is github.com,can be gitlib.com  gitee.com ...'
-
-  + default: 'github.com'
-
++ description: 'default is github.com,can be gitlib.com  gitee.com ...'
+  
++ default: 'github.com'
+  
 + **source_branch**:
 
   + description: 'Default master'
@@ -142,15 +141,14 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 + **publish_commit_message**:
 
   + description: 'Default Updated by gitbook-action and time, can use last commit message'
-  + Tip: can set `${{ github.event.head_commit.message }}` as [last commit message](https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context)
+  + Tip: can set `${{` `github.event.head_commit.message` `}}` as [last commit message](https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context)
 
 
 + **publish_hub**:
-
-  + description: 'Default is github.com,can be gitlib.com gitee.com ...'
-
-  + default: 'github.com'
-
++ description: 'Default is github.com,can be gitlib.com gitee.com ...'
+  
++ default: 'github.com'
+  
 + **publish_branch**:
 
   + description: 'Defaule is gh-pages, auto create'
@@ -476,8 +474,8 @@ jobs:
 
     # example1--> https://ZanderZhao.github.io/gitbook-action
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2
-      with:
+      uses: zanderzhao/gitbook-action@v1.2.4 # https://github.com/ZanderZhao/gitbook-action/releases 
+      with:                                # Just example, click above, use latest please 
         token: ${{ secrets.PERSONAL_TOKEN }}
         time_zone: Asia/Shanghai   # set time zone
         source_dir: source         # clone from source
@@ -486,7 +484,7 @@ jobs:
 
     # example2--> https://ZanderZhao.github.io/gitbook-action/gitbook-docs
     - name: Gitbook Action
-      uses: zanderzhao/gitbook-action@v1.2
+      uses: zanderzhao/gitbook-action@v1.2.4
       with:
         token: ${{ secrets.PERSONAL_TOKEN }} 
         time_zone: Asia/Shanghai
