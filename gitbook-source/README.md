@@ -65,10 +65,9 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 
 
 + **git_email:**
-
-  + description: ' If git name is different with github, please add'
-
-  + default: [**@users.noreply.github.com](https://help.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#setting-your-commit-email-address-on-github)
++ description: ' If git name is different with github, please add'
+  
++ default: [**@users.noreply.github.com](https://help.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#setting-your-commit-email-address-on-github)
 
 
 + **time_zone:**
@@ -141,7 +140,7 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
 + **publish_commit_message**:
 
   + description: 'Default Updated by gitbook-action and time, can use last commit message'
-  + Tip: can set `${{` `github.event.head_commit.message` `}}` as [last commit message](https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context)
+  + Tip: can set  `github.event.head_commit.message`  as [last commit message](https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context)  [example1](https://github.com/ZanderZhao/gitbook-action/blob/master/.github/workflows/gitbook-action.yml)
 
 
 + **publish_hub**:
