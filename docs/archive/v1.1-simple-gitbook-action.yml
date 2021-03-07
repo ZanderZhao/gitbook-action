@@ -1,0 +1,49 @@
+# This v1, you can get v2 from https://github.com/zanderzhao/gitbook-action
+
+# You must add the following secrets in your Secrets(repo->Setting->Secrets->Add a new secret)  
+#     Name:   PERSIONAL_TOKEN 
+#     Value:  you can git it from Settings->Developer settings->Personal access tokens->Generate new token
+
+# You must create gh-pages branch before.
+# You must put this in your repo master branch  as repo/.github/workflow/gitbook_action.yml
+
+
+name: 'Gitbook Action'
+
+
+on:
+  push:
+    branches:    
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: install_gitbook_plugins
+      run: |
+        npm install gitbook-cli  -g
+        gitbook -v
+        gitbook install
+    - name: build_gitbook
+      run: |
+        gitbook init
+        gitbook build
+    - name: push_to_pages
+      run: |
+        cd ./_book
+        git init
+        git config --local user.name "${GITHUB_ACTOR}"
+        git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git add *
+        git commit -m "Update by gitbook-action"
+        git push --force  "https://${GITHUB_ACTOR}:${{ secrets.PERSONAL_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
