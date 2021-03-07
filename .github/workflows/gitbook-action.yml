@@ -18,9 +18,12 @@ jobs:
       with:                                   #    or fork this repo and use YourName/gitbook-action@master
         token: ${{ secrets.PERSONAL_TOKEN }}  # -> remember add this in settings/secrets as https://ZanderZhao.github.io/gitbook-action/
         time_zone: Asia/Shanghai
-        source_dir: gitbook-source
+        source_branch: master
+        source_dir: docs-src
         source_edit_time: true
         publish_commit_message: ${{ github.event.head_commit.message }}
+        publish_branch: master
+        publish_dir: docs
 
     # example2
     - name: Gitbook Action
@@ -31,6 +34,7 @@ jobs:
         source_repo: GitbookIO/gitbook
         source_branch: master
         source_dir: docs
-        publish_dir: gitbook-docs
+        publish_branch: master
+        publish_dir: docs/official
         publish2_repo: gitbook-org/gitbook
-
+        # Some not indicated are default values, eg: publish_repo
