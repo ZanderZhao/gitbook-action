@@ -60,6 +60,8 @@ Add your token to https://github.com/ **yourname/yourrepo** /settings/secrets
     + Keep time setting of file
     + ... ...
 
+> Note that if the activation branch and the compiled file publishing branch are the same branch, it may cause a dead loop, so you need to cancel the task manually.
+
 ## Option
 
 The following is options, [click here, to detail](https://ZanderZhao.github.io/gitbook-action/#option)
