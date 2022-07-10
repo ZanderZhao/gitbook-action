@@ -11,7 +11,6 @@
     "search-pro@git+https://github.com/plugins-zander/gitbook-plugin-search-pro.git",
     "splitter@git+https://github.com/plugins-zander/gitbook-plugin-splitter.git",
     "edit-link@git+https://github.com/plugins-zander/gitbook-plugin-edit-link.git",
-    "sitemap-general@git+https://github.com/plugins-zander/gitbook-plugin-sitemap-general.git",
     "gtag@git+https://github.com/plugins-zander/gitbook-plugin-gtag.git",
     "chapter-fold@git+https://github.com/plugins-zander/gitbook-plugin-chapter-fold.git",
     "copy-code-button@git+https://github.com/plugins-zander/gitbook-plugin-copy-code-button.git"
