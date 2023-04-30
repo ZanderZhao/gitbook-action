@@ -1,4 +1,12 @@
 # Gitbook Action
+[![GitHub stars](https://img.shields.io/github/stars/ZanderZhao/gitbook-action)](https://github.com/ZanderZhao/gitbook-action/stars)
+[![GitHub forks](https://img.shields.io/github/forks/ZanderZhao/gitbook-action)](https://github.com/ZanderZhao/gitbook-action/forks)
+[![GitHub issues](https://img.shields.io/github/issues/ZanderZhao/gitbook-action)](https://github.com/ZanderZhao/gitbook-action/issues)
+[![Docker Pulls](https://img.shields.io/docker/pulls/zanderzhao/gitbook-action)](https://hub.docker.com/r/zanderzhao/gitbook-action)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/zanderzhao/gitbook-action)](https://hub.docker.com/r/zanderzhao/gitbook-action)
+[![Docker Stars](https://img.shields.io/docker/stars/zanderzhao/gitbook-action)](https://hub.docker.com/r/zanderzhao/gitbook-action)
+[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/zanderzhao/gitbook-action)](https://hub.docker.com/r/zanderzhao/gitbook-action)
+
 
 This action builds and publishes a gitbook to github pages and other pages. [Click here for more information](https://ZanderZhao.github.io/gitbook-action). 
 
